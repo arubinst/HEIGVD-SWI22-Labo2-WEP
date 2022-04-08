@@ -84,6 +84,22 @@ Dans cette partie, vous allez enrichir votre script développé dans la partie p
 - Pour un test encore plus intéressant (optionnel), vous pouvez utiliser un AP (disponible sur demande) et envoyer vos fragments. Pour que l’AP accepte vous données injectées, il faudra faire une « fake authentication » que vous pouvez faire avec `aireplay-ng`
 - Si l’AP accepte vos fragments, il les recomposera et les retransmettra en une seule trame non-fragmentée !
 
+> *On a testé de fragmenter en 4 un paquet de 144 bytes (chacun 36 bytes)*
+>
+> ***Paquet 1***
+>
+> *Le premier paquet nous montre les informations suivantes (en rouge)*
+>
+> ![](media/03-Wireshark_0.PNG)
+>
+> *On constate bien que c'est bien le premier fragment, qu'il est suivi de plusieurs fragments ("More fragments"), qu'il sera bien réassemblé dans la trame "4" et que les données sont décryptées*
+>
+> ***Paquet 4***
+>
+> ![](media/03-Wireshark_3.PNG)
+>
+> *On constate bien que c'est le dernier paquet ("More fragments" = 0), que son numéro est correct (No 3 --> part du paquet 0), et qu'il contient bien toutes les données assemblées.*
+
 ## Livrables
 
 Un fork du repo original . Puis, un Pull Request contenant :
