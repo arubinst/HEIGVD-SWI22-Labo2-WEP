@@ -32,15 +32,15 @@ Dans cette partie, vous allez récupérer le script Python [manual-decryption.py
 - Comparer la sortie du script avec la capture text déchiffrée par Wireshark
 - Analyser le fonctionnement du script
 
-> *On constate qu'avant le déchiffrement Wireshark n'arrive pas lire la trame*
+> *On constate qu'avant le déchiffrement, Wireshark n'arrive pas lire la trame*
 >
 > ![](media/01-trameWireshark-AvantDechiffrage.PNG)
 >
-> *Après avoir mis la clé dans Wireshark (pour permettre le déchiffrement), on constate que Wireshark arrive trouver le type de requête (dans ce cas ARP)*
+> *Après avoir mis la clé dans Wireshark (pour permettre le déchiffrement), on constate que Wireshark arrive trouver le type de requête (dans ce cas ARP)* ainsi que le texte déchiffré (dans l'onglet `Decrypted WEP data`)
 >
 > ![](media/01-trameWireshark-AprèsDechiffrage.PNG)
 >
-> *Lorsqu'on exécute le script, on remarque bien que le "Text" similaire à la capture, cependant l'ICV ne l'est pas. Ceci est du au fait que le script ne permet pas de visualiser l'ICV encrypté. Néanmoins, Wireshark nous signale à côté de l'ICV le message "CORRECT", supposant que l'ICV est juste. (Ce point est vérifié lorsqu'on a crée le script dans la partie 2)*
+> *Lorsqu'on exécute le script, on remarque bien que le "Text" est similaire à la capture, cependant l'ICV ne l'est pas. Ceci est du au fait que le script ne permet pas de visualiser l'ICV encrypté. Néanmoins, Wireshark nous signale à côté de l'ICV le message "CORRECT", supposant que l'ICV est juste. (Ce point est vérifié lorsqu'on a crée le script dans la partie 2)*
 >
 > ![](media/01-scriptDechiffrage.PNG)
 >
@@ -60,7 +60,7 @@ Vous devrez donc créer votre message, calculer le contrôle d’intégrité (IC
 - Vous pouvez vous guider à partir du script fourni pour les différentes conversions de formats qui pourraient être nécessaires.
 - Vous pouvez exporter votre nouvelle trame en format pcap utilisant Scapy et ensuite, l’importer dans Wireshark. Si Wireshark est capable de déchiffrer votre trame forgée, elle est correcte !
 
->*La capture Wireshark créé permet de bien déchiffrer le script que nous avons effectué: On constate bien que l'on trouve les éléments suivants :*
+>*La capture Wireshark créée permet de bien déchiffrer le script que nous avons effectué: On constate bien que l'on trouve les éléments suivants :*
 >
 >- Message (en vert)
 >- ICV encrypté (de plus Wireshark permet de nous confirmer qu'il est correct) (en rouge)
@@ -69,6 +69,7 @@ Vous devrez donc créer votre message, calculer le contrôle d’intégrité (IC
 >
 >![](media/02-wireshark.PNG)
 
+---
 
 ### 3. Fragmentation
 
@@ -84,7 +85,7 @@ Dans cette partie, vous allez enrichir votre script développé dans la partie p
 - Pour un test encore plus intéressant (optionnel), vous pouvez utiliser un AP (disponible sur demande) et envoyer vos fragments. Pour que l’AP accepte vous données injectées, il faudra faire une « fake authentication » que vous pouvez faire avec `aireplay-ng`
 - Si l’AP accepte vos fragments, il les recomposera et les retransmettra en une seule trame non-fragmentée !
 
-> *On a testé de fragmenter en 4 un paquet de 144 bytes (chacun 36 bytes)*
+> *On a testé de fragmenter un paquet de 144 bytes en 4 (chacun de 36 bytes)*
 >
 > ***Paquet 1***
 >

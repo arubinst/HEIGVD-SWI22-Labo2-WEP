@@ -15,16 +15,22 @@ from scapy.layers.dot11 import RadioTap
 #Cle wep AA:AA:AA:AA:AA
 key=b'\xaa\xaa\xaa\xaa\xaa'
 
-# Fichier de sortie
+# Fichier de sortie au format "pcap"
 generated_arp = "outputfragmented.pcap"
 
-# Message a chiffrer (le fragment doit faire 36 chars !)
+# Message a chiffrer (le fragment doit faire 36 chars)
 data_frag = "THISISAFRAGOFWEPMANUALFRAGMENTATION!"
+
+# Longueur des datas
 DATA_FRAG_LEN = len(data_frag)
+
+# Nombre de fragments désirés
 nb_frag = 4
+
+# Multiplication du message à chiffer par le nombre de fragments totaux
 data = data_frag * nb_frag
 
-# Fncryption des données
+# Encryption des données
 def encryption(key, data, arp):
     # Calcul de l'ICV
     icv = binascii.crc32(data.encode()) & 0xffffffff
@@ -45,7 +51,7 @@ def encryption(key, data, arp):
     return cipher_text
 
 
-# Fonction qui permet de créer un packet
+# Création d'un packet
 def create_packet(key, data):
     # Lecture de message chiffré - rdpcap retourne toujours un array, même si la capture contient un seul paquet
     arp = rdpcap('arp.cap')[0]
@@ -68,7 +74,9 @@ def create_packet(key, data):
 if os.path.isfile(generated_arp):
     os.remove(generated_arp)
 
+# Compteur pour la numérotation des fragments 
 i = 0
+
 # On construit un paquet pour chaque fragment
 while(nb_frag > 0):
     msg = data[:DATA_FRAG_LEN]

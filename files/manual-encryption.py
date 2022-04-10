@@ -15,38 +15,38 @@ from scapy.layers.dot11 import RadioTap
 #Cle wep AA:AA:AA:AA:AA
 key=b'\xaa\xaa\xaa\xaa\xaa'
 
-#lecture de message chiffré - rdpcap retourne toujours un array, même si la capture contient un seul paquet
+#Lecture de message chiffré - rdpcap retourne toujours un array, même si la capture contient un seul paquet
 arp = rdpcap('arp.cap')[0]  
 
-# Fichier de sortie
+# Fichier de sortie au format "pcap"
 generated_arp = "output.cap"
 
 # Message a chiffrer
 data = "THISISLABOFSWITOENCRYPTWEPMESSAGE"
 
-# Calcul de l'ICV
+# Calcul de l'ICV et ajout au corps de la trame après les datas
 icv = binascii.crc32(data.encode()) & 0xffffffff
 
-# Conversion en unsigned
+# Conversion en unsigned de l'ICV
 uncrypted_icv = struct.pack('<L', icv)
 
-# trame pour RC4
+# Trame pour RC4 (composée des données + de l'ICV)
 msg_rc4 = data.encode() + uncrypted_icv
 
-# rc4 seed est composé de IV+clé
+# RC4 seed est composé de IV + clé
 seed = arp.iv+key
 
-# déchiffrement rc4
+# Chiffrement rc4
 cipher = RC4(seed, streaming=False)
 cipher_text=cipher.crypt(msg_rc4)
 
-# recupération de l'ICV + format Long big endian
+# Recupération de l'ICV + format Long big endian
 arp.icv = struct.unpack('!L', cipher_text[-4:])[0]
 
-# le message sans icv
+# Le message sans l'ICV
 arp.wepdata = cipher_text[:-4]
 
-# affichage
+# Affichage
 print ('Message : ' + data)
 print ('Encrypted Message : ' + cipher_text[:-4].hex())
 print ("icv : " + '{:x}'.format(icv)) 
@@ -55,5 +55,5 @@ print ("icv encrypted : " + cipher_text[-4:].hex())
 # Reset du fichier cap
 arp[RadioTap].len = None
 
-# création pcap
+# Création du fichier pcap
 wrpcap(generated_arp, arp)
