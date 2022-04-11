@@ -30,26 +30,29 @@ def decrypt(pkt, key):
 
     # le message sans le ICV
     text_enclair=cleartext[:-4]
+    print(text_enclair, cleartext[-4:])
     return text_enclair
 
 def encrypt(msg, pkt, key):
 
-    # ICV = CRC23(payload)
+    # ICV = CRC32(payload)
     icv = binascii.crc32(msg)
-
+    print(icv)
     ## data_to_encrypt = payload + ICV
-    data_to_encrypt = msg + icv.to_bytes(4, "big")
+    data_to_encrypt = msg# + icv.to_bytes(4, "little")
 
     # rc4 seed est composé de IV+clé
     seed = pkt.iv+key # on peut changer l'IV
 
     # chiffrement rc4
     cipher = RC4(seed, streaming=False)
-    ciphertext=cipher.crypt(data_to_encrypt)
+    ciphertext=cipher.crypt(data_to_encrypt + icv.to_bytes(4, "little"))
 
     # affect ciphertext as new payload
-    pkt.wepdata = ciphertext
-    pkt.icv = icv # transformation en format Long big endian
+    pkt.wepdata = ciphertext[:-4]
+    pkt.icv = int.from_bytes(ciphertext[-4:], byteorder='big')
+
+
 
     return pkt
 
@@ -69,6 +72,7 @@ if __name__ == "__main__":
 
     # export
     #print(arp.show())
-    wrpcap("arp_reencrypted.cap", arp, append=True)
+    wrpcap("arp_reencrypted.cap", arp)
     
+    arp.show2()
     print("Exported cap file")
