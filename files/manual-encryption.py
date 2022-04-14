@@ -5,7 +5,7 @@
 # Author : Quentin Le Ray, Ryan Sauge
 # Date : 07.04.2022
 # Description : Manually encrypt a wep message given the WEP key
-
+import sys
 
 from scapy.all import *
 import binascii
@@ -21,23 +21,22 @@ textToSend = b"Coucou"
 trame = rdpcap('arp.cap')[0]
 
 # rc4 seed est composé de IV+clé
-seed = trame.iv + key
+#seed = trame.iv + key
 
-icvClear = long_to_bytes(binascii.crc32(textToSend))
+#icvClear = long_to_bytes(binascii.crc32(textToSend))
 
 # Chiffrement rc4
-cipher = RC4(seed, streaming=False)
-cipherText = cipher.crypt(textToSend + icvClear)
+#cipher = RC4(seed, streaming=False)
+#cipherText = cipher.crypt(textToSend + icvClear)
 
-trame.icv = bytes_to_long(cipherText[-4:])
+#trame.icv = bytes_to_long(cipherText[-4:])
 
 # le message sans le ICV
-trame.wepdata = cipherText[:-4]
+#trame.wepdata = cipherText[:-4]
 
 # Write trame into a Wireshark file
-wrpcap("trameToSend.pcapng", trame)
+#wrpcap("trameToSend.pcapng", trame)
 
-exit()
 
 ############################################ To Remove #####################################################
 
@@ -53,6 +52,8 @@ icv_encrypted = '{:x}'.format(arp.icv)
 
 # text chiffré y-compris l'icv
 message_encrypted = arp.wepdata + bytes.fromhex(icv_encrypted)
+print(arp.wepdata)
+print(textToSend)
 
 # déchiffrement rc4
 cipher = RC4(seed, streaming=False)
@@ -60,12 +61,35 @@ cleartext = cipher.crypt(message_encrypted)
 
 # le ICV est les derniers 4 octets - je le passe en format Long big endian
 icv_enclair = cleartext[-4:]
-icv_enclair = icv_enclair
 icv_numerique = struct.unpack('!L', icv_enclair)
+
+print(icv_enclair)
+print(icv_numerique)
 
 # le message sans le ICV
 text_enclair = cleartext[:-4]
 
+################################################Tests débug##################################
+icvClear = long_to_bytes(binascii.crc32(text_enclair))
+print("test : ", icvClear)
+
+icvClear = (binascii.crc32(text_enclair)).to_bytes(4, byteorder='big')
+print("test 2: ", icvClear)
+
+
+# Chiffrement rc4
+cipher = RC4(seed, streaming=False)
+cipherText = cipher.crypt(text_enclair + icvClear)
+
+trame.icv = bytes_to_long(cipherText[-4:])
+
+# le message sans le ICV
+trame.wepdata = cipherText[:-4]
+
+# Write trame into a Wireshark file
+wrpcap("trameToSendTest.pcapng", trame)
+
+############################################## Fin test débug ###################################
 print('Text: ' + text_enclair.hex())
 print('icv:  ' + icv_enclair.hex())
 print('icv(num): ' + str(icv_numerique))
