@@ -38,13 +38,11 @@ Dans cette partie, vous allez récupérer le script Python [manual-decryption.py
 
 ![arp-crypt](./assets/arp-crypt.PNG)
 
+
+
 - Trame déchiffrée
 
-
-
 ![arp-decrypt](./assets/arp-decrypt.PNG)
-
-
 
 
 
@@ -72,15 +70,22 @@ Le fichier Wireshark correspondant est situé ici : [encryptedFrame.pcapng](file
 
 ![trame-encrypt](./assets/trame-encrypt.PNG)
 
+
+
 - Trame déchiffrée
 
 ![trame-decrypt](./assets/trame-decrypt.PNG)
 
-- Envoie de la trame sur le réseau
+
+
+- Envoi de la trame sur le réseau
 
 ![paquet](./assets/wlan0mon/paquet.png)
 
-Et le résultat déchiffré avec la clé dans wireshark
+
+
+- Et le résultat déchiffré avec la clé dans wireshark
+
 
 ![frame](./assets/wlan0mon/frame.png)
 
