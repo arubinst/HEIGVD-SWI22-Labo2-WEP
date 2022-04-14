@@ -125,7 +125,7 @@ La trame sauvée en format wireshark se situe ici :  [trameFrag.pcapng](files/tr
 
 Enfin voici la capture d'écran montrant les 4 trames que nous avons générées. On peut voir que Wireshark a pu détecter qu'il s'agissait de trames fragmentée et qu'il a pu les réassembler dans la dernière trame.
 
-Remarques : dans le script on avait configuré l'envoi de 4 fragments pour effectuer des tests, d'où les 3 fragments ici. On a ensuite mis en conformité le code par rapport à la consigne.
+Remarques : dans le script on avait configuré l'envoi de 4 fragments pour effectuer des tests, d'où les 4 fragments présent dans la capture. On a ensuite mis en conformité le code par rapport à la consigne. Le fichier actuel est celui avec 4 fragments.
 
 ![fragment](./assets/fragment.PNG)
 
