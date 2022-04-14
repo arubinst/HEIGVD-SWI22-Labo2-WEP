@@ -71,11 +71,32 @@ Un fork du repo original . Puis, un Pull Request contenant :
 
 -	Script de chiffrement WEP **abondamment commenté/documenté**
   - Fichier pcap généré par votre script contenant la trame chiffrée
+  
   - Capture d’écran de votre trame importée et déchiffré par Wireshark
+  
+    Avec la commande:
+  
+    ```bash
+    sudo python3 manual-encryption_f --data "Je veux être dans le rendu de SWI :)"
+    ```
+  
+    La fichier encrypted.cap:
+  
+    ![](images/encrypted.png)
+  
 -	Script de fragmentation **abondamment commenté/documenté**
   - Fichier pcap généré par votre script contenant les fragments
-  - Capture d’écran de vos trames importées et déchiffrés par Wireshark 
-
+  
+  - Capture d’écran de vos trames importées et déchiffrés par Wireshark
+  
+    Avec la commande:
+  
+    ![](images/cmd_frag.jpg)
+  
+    Le fichier encrypted_and_fragmented.cap
+  
+    ![](images/ws_frag.jpg)
+  
 -	Envoyer le hash du commit et votre username GitHub par email au professeur et à l'assistant
 
 
