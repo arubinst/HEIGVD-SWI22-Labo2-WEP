@@ -1,4 +1,4 @@
-[Livrables](#livrables)
+[ >Livrables](#livrables)
 
 [Échéance](#échéance)
 
@@ -27,13 +27,13 @@ Vous allez devoir faire des recherches sur internet pour apprendre à utiliser S
 Dans cette partie, vous allez récupérer le script Python [manual-decryption.py](files/manual-decryption.py). Il vous faudra également le fichier de capture [arp.cap](files/arp.cap) contenant un message arp chiffré avec WEP et la librairie [rc4.py](files/rc4.py) pour générer les keystreams indispensables pour chiffrer/déchiffrer WEP. Tous les fichiers doivent être copiés dans le même répertoire local sur vos machines.
 
 - Ouvrir le fichier de capture [arp.cap](files/arp.cap) avec Wireshark
-   
+  
 - Utiliser Wireshark pour déchiffrer la capture. Pour cela, il faut configurer dans Wireshark la clé de chiffrement/déchiffrement WEP (Dans Wireshark : Preferences&rarr;Protocols&rarr;IEEE 802.11&rarr;Decryption Keys). Il faut également activer le déchiffrement dans la fenêtre IEEE 802.11 (« Enable decryption »). Vous trouverez la clé dans le script Python [manual-decryption.py](files/manual-decryption.py).
-   
+  
 - Exécuter le script avec `python manual-decryption.py`
-   
+  
 - Comparer la sortie du script avec la capture text déchiffrée par Wireshark
-   
+  
 - Analyser le fonctionnement du script
 
 ### 2. Chiffrement manuel de WEP
@@ -70,12 +70,29 @@ Dans cette partie, vous allez enrichir votre script développé dans la partie p
 Un fork du repo original . Puis, un Pull Request contenant :
 
 -	Script de chiffrement WEP **abondamment commenté/documenté**
+  
+  > manual-encryption.py
+  
   - Fichier pcap généré par votre script contenant la trame chiffrée
+  
+    > arp-encryption.pcap
+  
   - Capture d’écran de votre trame importée et déchiffré par Wireshark
+  
+    ![Encryption](C:\Users\Nicolas\OneDrive\Ecole\SWI\Laboratoires\HEIGVD-SWI22-Labo2-WEP\files\figures\1.png)
+  
 -	Script de fragmentation **abondamment commenté/documenté**
-  - Fichier pcap généré par votre script contenant les fragments
-  - Capture d’écran de vos trames importées et déchiffrés par Wireshark 
+  
+  > fragmentation.py
 
+  - Fichier pcap généré par votre script contenant les fragments
+  
+    > fragmentation.cap
+  
+  - Capture d’écran de vos trames importées et déchiffrés par Wireshark 
+  
+  > ![Fragmentation](C:\Users\Nicolas\OneDrive\Ecole\SWI\Laboratoires\HEIGVD-SWI22-Labo2-WEP\files\figures\2.png)
+  
 -	Envoyer le hash du commit et votre username GitHub par email au professeur et à l'assistant
 
 
