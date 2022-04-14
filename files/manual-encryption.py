@@ -6,6 +6,7 @@ __author__      = "Pellissier David & Ruckstuhl Michael"
 
 from scapy.all import *
 import binascii
+import argparse
 from rc4 import RC4
 
 def decrypt(pkt, key):
@@ -30,20 +31,19 @@ def decrypt(pkt, key):
 
     # le message sans le ICV
     text_enclair=cleartext[:-4]
-    print(text_enclair, cleartext[-4:])
     return text_enclair
 
 def encrypt(msg, pkt, key):
 
     # ICV = CRC32(payload)
     icv = binascii.crc32(msg)
-    print(icv)
     ## data_to_encrypt = payload + ICV
-    data_to_encrypt = msg# + icv.to_bytes(4, "little")
+    data_to_encrypt = msg
 
     # rc4 seed est composé de IV+clé
-    seed = pkt.iv+key # on peut changer l'IV
+    seed = pkt.iv+key
 
+    print("ICV:", icv.to_bytes(4, "little"))
     # chiffrement rc4
     cipher = RC4(seed, streaming=False)
     ciphertext=cipher.crypt(data_to_encrypt + icv.to_bytes(4, "little"))
@@ -52,26 +52,38 @@ def encrypt(msg, pkt, key):
     pkt.wepdata = ciphertext[:-4]
     pkt.icv = int.from_bytes(ciphertext[-4:], byteorder='big')
 
-
+    pkt.len = None # force Scapy to recalculate it (thx Leonard who found this trick)
 
     return pkt
 
 
 if __name__ == "__main__":
 
+    # just parsing arguments
+    parser = argparse.ArgumentParser(
+        description="Manually encrypt WEP data",
+        epilog="This script was developped as an exercise for the SWI course at HEIG-VD")
+        
+    parser.add_argument("reference_cap", help="Already encrypted CAP file to use for encrypting data over it")
+    parser.add_argument("--data", help="Data to encrypt. If not defined, use decrypted data from reference_cap")
+
+    args = parser.parse_args()
+
     #Cle wep AA:AA:AA:AA:AA
     key= b'\xaa\xaa\xaa\xaa\xaa'
+    arp = rdpcap(args.reference_cap)[0]
 
-    arp = rdpcap('arp.cap')[0]
-    #lecture de message clair
-    msg = decrypt(arp, key)
-
+    if args.data:
+        msg = bytes(args.data, "utf-8")
+    else:
+        print("Using reference_cap data")
+        msg = decrypt(arp, key)
     
+    #lecture de message clair
 
     arp = encrypt(msg, arp, key)
 
     # export
-    #print(arp.show())
     wrpcap("arp_reencrypted.cap", arp)
     
     arp.show2()
