@@ -64,6 +64,12 @@ Vous devrez donc créer votre message, calculer le contrôle d’intégrité (IC
 
 Nous avons créé le script nommé [manual-encryption.py](files\manual-encryption.py) pour faire cela.
 
+- Lancement
+
+```bash
+python3 manual-encryption.py -i wlan0mon
+```
+
 Le fichier Wireshark correspondant est situé ici : [encryptedFrame.pcapng](files/encryptedFrame.pcapng) 
 
 - Trame chiffrée
@@ -103,9 +109,17 @@ Dans cette partie, vous allez enrichir votre script développé dans la partie p
 - Pour un test encore plus intéressant (optionnel), vous pouvez utiliser un AP (disponible sur demande) et envoyer vos fragments. Pour que l’AP accepte vous données injectées, il faudra faire une « fake authentication » que vous pouvez faire avec `aireplay-ng`
 - Si l’AP accepte vos fragments, il les recomposera et les retransmettra en une seule trame non-fragmentée !
 
-### Resultat
+### Résultat
 
 Nous avons créé le script nommé [fragmentation.py](files/fragmentation.py) .
+
+- Lancement
+
+```bash
+python3 fragmentation.py -i wlan0mon
+```
+
+
 
 La trame sauvée en format wireshark se situe ici :  [trameFrag.pcapng](files/trameFrag.pcapng)
 
@@ -113,7 +127,11 @@ Enfin voici la capture d'écran montrant les 4 trames que nous avons générées
 
 Remarques : dans le script on avait configuré l'envoi de 4 fragments pour effectuer des tests, d'où les 3 fragments ici. On a ensuite mis en conformité le code par rapport à la consigne.
 
-![fragment](assets/fragment.PNG)
+![fragment](./assets/fragment.PNG)
+
+- Envoi sur le réseau
+
+![wlan0mon](./assets/wlan0mon/wlan0mon.png)
 
 ## Livrables
 
