@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 # Author : Quentin Le Ray, Ryan Sauge
-# Date : 09.04.2022
+# Date : 14.04.2022
 # Description : Send fragmented packet
+
 import argparse
 
 from scapy.all import *
