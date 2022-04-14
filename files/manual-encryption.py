@@ -58,6 +58,6 @@ def main():
     frame = createFrame(textToSend, key)
 
     # Send frame
-    sendp(frame, args.Interface)
+    sendp(frame, iface=args.Interface)
 
 main()
