@@ -12,7 +12,7 @@ from rc4 import RC4
 
 # WEP key AA:AA:AA:AA:AA
 key = b'\xaa\xaa\xaa\xaa\xaa'
-textToSend = "CoucouCoucou".encode()
+textToSend = "testTestTest".encode()
 
 # Get the trame
 trame = rdpcap('arp.cap')[0]

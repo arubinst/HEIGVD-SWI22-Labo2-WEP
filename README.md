@@ -60,6 +60,8 @@ Vous devrez donc créer votre message, calculer le contrôle d’intégrité (IC
 
 ### Résultat
 
+Le fichier Wireshark correspondant est situé ici : [encryptedFrame.pcapng](files/encryptedFrame.pcapng) 
+
 - Trame chiffrée
 
 ![trame-encrypt](./assets/trame-encrypt.PNG)
