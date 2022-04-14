@@ -7,6 +7,7 @@ __author__      = "Pellissier David & Ruckstuhl Michael"
 from scapy.all import *
 import binascii
 import argparse
+from random import randbytes
 from rc4 import RC4
 
 def decrypt(pkt, key):
@@ -41,8 +42,7 @@ def encrypt(msg, pkt, key):
     data_to_encrypt = msg + icv
 
     # rc4 seed est composé de IV+clé
-    seed = pkt.iv + key
-    #seed = b'\x00\x00\x00'+ key
+    seed = iv + key
 
     # chiffrement rc4
     cipher = RC4(seed, streaming=False)
@@ -53,10 +53,36 @@ def encrypt(msg, pkt, key):
     encrypted_icv = ciphertext[-4:]
     pkt.icv = int.from_bytes(encrypted_icv, byteorder='big')
 
-    #pkt.iv = b'\x00\x00\x00'
     pkt['RadioTap'].len = None # force Scapy to recalculate it
 
     return pkt
+
+def encrypt_fragments(msg, pkt, key):
+
+    icv = binascii.crc32(msg).to_bytes(4, "little")
+
+    step = len(msg) //3
+    msgs = [msg[i:i+step] for i in range(0, len(msg) - step, step)]
+    pkts = []
+
+    print(msgs)
+
+    for i in range(len(msgs)):
+
+        pkt.SC += 1 # starts with 1
+
+        m = msgs[i]
+        pkt.iv = randbytes(4)
+
+        encrypted = encrypt(m, pkt, key)
+
+        pkt.FCfield.MF = (i != len(msgs) - 1)
+        print(pkt.FCfield.MF)
+        
+        pkts.append(pkt)
+
+
+    return pkts
 
 
 if __name__ == "__main__":
@@ -66,7 +92,7 @@ if __name__ == "__main__":
         description="Manually encrypt WEP data",
         epilog="This script was developped as an exercise for the SWI course at HEIG-VD")
         
-    parser.add_argument("--data", help="Data to encrypt. If not defined, use decrypted data from arp.cap")
+    parser.add_argument("--data", type=lambda x: x if len(x) > 80 else False, help="Data to encrypt. At least 9 bytes. If not defined, use decrypted data from arp.cap")
 
     args = parser.parse_args()
 
@@ -82,11 +108,11 @@ if __name__ == "__main__":
         msg = decrypt(arp, key)
     
     #lecture de message clair
-
-    arp = encrypt(msg, arp, key)
+    iv = arp.iv
+    packets = encrypt_fragments(msg, arp, key)
 
     # export
-    wrpcap("arp_reencrypted.cap", arp)
+    wrpcap("arp_reencrypted.cap", packets)
     
-    arp.show2()
+
     print("Exported cap file")

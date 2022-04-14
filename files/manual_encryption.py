@@ -42,7 +42,6 @@ def encrypt(msg, pkt, key):
 
     # rc4 seed est composé de IV+clé
     seed = pkt.iv + key
-    #seed = b'\x00\x00\x00'+ key
 
     # chiffrement rc4
     cipher = RC4(seed, streaming=False)
@@ -51,9 +50,8 @@ def encrypt(msg, pkt, key):
     # affect ciphertext as new payload
     pkt.wepdata = ciphertext[:-4]
     encrypted_icv = ciphertext[-4:]
-    pkt.icv = struct.unpack('!L', ciphertext[-4:])[0] #int.from_bytes(encrypted_icv, byteorder='big')
+    pkt.icv = int.from_bytes(encrypted_icv, byteorder='big')
 
-    #pkt.iv = b'\x00\x00\x00'
     pkt['RadioTap'].len = None # force Scapy to recalculate it
 
     return pkt
@@ -66,10 +64,9 @@ if __name__ == "__main__":
         description="Manually encrypt WEP data",
         epilog="This script was developped as an exercise for the SWI course at HEIG-VD")
         
-    parser.add_argument("--data", help="Data to encrypt. If not defined, use decrypted data from arp.cap")
+    parser.add_argument("--data", type=lambda x: x if len(x) < 27 else False, help="Data to encrypt. If not defined, use decrypted data from arp.cap")
 
     args = parser.parse_args()
-
 
     #Cle wep AA:AA:AA:AA:AA'\x00\x00\x00'
     key= b'\xaa\xaa\xaa\xaa\xaa'
