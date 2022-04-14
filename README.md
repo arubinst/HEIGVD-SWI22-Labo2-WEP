@@ -38,11 +38,13 @@ Dans cette partie, vous allez récupérer le script Python [manual-decryption.py
 
 ![arp-crypt](./assets/arp-crypt.PNG)
 
-
-
 - Trame déchiffrée
 
+
+
 ![arp-decrypt](./assets/arp-decrypt.PNG)
+
+
 
 
 
@@ -74,7 +76,13 @@ Le fichier Wireshark correspondant est situé ici : [encryptedFrame.pcapng](file
 
 ![trame-decrypt](./assets/trame-decrypt.PNG)
 
+- Envoie de la trame sur le réseau
 
+![paquet](./assets/wlan0mon/paquet.png)
+
+Et le résultat déchiffré avec la clé dans wireshark
+
+![frame](./assets/wlan0mon/frame.png)
 
 ### 3. Fragmentation
 
@@ -100,8 +108,6 @@ Enfin voici la capture d'écran montrant les 4 trames que nous avons générées
 
 ![fragment](assets/fragment.PNG)
 
-
-
 ## Livrables
 
 Un fork du repo original . Puis, un Pull Request contenant :
@@ -109,14 +115,11 @@ Un fork du repo original . Puis, un Pull Request contenant :
 -	Script de chiffrement WEP **abondamment commenté/documenté**
   - Fichier pcap généré par votre script contenant la trame chiffrée
   - Capture d’écran de votre trame importée et déchiffré par Wireshark
-  
 -	Script de fragmentation **abondamment commenté/documenté**
   - Fichier pcap généré par votre script contenant les fragments
   - Capture d’écran de vos trames importées, déchiffrés et réassemblées par Wireshark
 
-- Envoyer le hash du commit et votre username GitHub par email au professeur et à l'assistant
-
-  
+-	Envoyer le hash du commit et votre username GitHub par email au professeur et à l'assistant
 
 
 ## Échéance
