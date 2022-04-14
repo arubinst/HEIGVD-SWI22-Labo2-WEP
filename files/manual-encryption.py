@@ -73,7 +73,7 @@ text_enclair = cleartext[:-4]
 icvClear = long_to_bytes(binascii.crc32(text_enclair))
 print("test : ", icvClear)
 
-icvClear = (binascii.crc32(text_enclair)).to_bytes(4, byteorder='big')
+icvClear = (binascii.crc32(text_enclair)).to_bytes(4, byteorder='little')
 print("test 2: ", icvClear)
 
 

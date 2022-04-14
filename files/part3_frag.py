@@ -8,51 +8,49 @@ import argparse
 
 from scapy.all import *
 import binascii
-from Crypto.Util.number import long_to_bytes, bytes_to_long
 from rc4 import RC4
 import zlib
 
-# Cle wep AA:AA:AA:AA:AA
+# WEP key AA:AA:AA:AA:AA
 key = b'\xaa\xaa\xaa\xaa\xaa'
-textToSend = b"Coucou"
+textToSend = "testTestTest".encode()
 
 
-# icvClear = long_to_bytes(binascii.crc32(textToSend))
-# icvClear = (binascii.crc32(textToSend)).to_bytes(4, byteorder='big')
 def createFrame():
     tab = []
-    for i in range(0, 3):
-        # Recup trame
+    LEN = 4
+    for i in range(0, LEN):
+        # Get the trame
         trame = rdpcap('arp.cap')[0]
 
-        # rc4 seed est composé de IV+clé
+        # rc4 seed is composded of IV + Key
         seed = trame.iv + key
-        print("IV", hex(bytes_to_long(trame.iv)))
-        trame.SC = i
-        icvClear = (zlib.crc32(textToSend)).to_bytes(4, byteorder='little')
 
-        # Chiffrement rc4
+        #Fragment number
+        trame.SC = i
+
+        trame[RadioTap].len = None
+
+        #Compute ICV
+        icvClear = binascii.crc32(textToSend).to_bytes(4, byteorder='little')
+
+        # Encrypt with rc4
         cipher = RC4(seed, streaming=False)
         cipherText = cipher.crypt(textToSend + icvClear)
+        trame.icv = struct.unpack('!L', cipherText[-4:])[0]
 
-        # trame.icv = bytes_to_long(cipherText[-4:])
-        print("trame icv", trame.icv)
-        trame.icv = int.from_bytes(cipherText[-4:], byteorder='little')
-        print("trame icv", trame.icv)
-
-        # le message sans le ICV
-        # trame.wepdata = cipherText[:-4]
+        # message without ICV
         trame.wepdata = cipherText[:-4]
-        if i == 2:
+        if i == (LEN - 1):
             trame.FCfield = trame.FCfield & 0xFB
         else:
             trame.FCfield = trame.FCfield | 0x04
         tab.append(trame)
-        # Write trame into a Wireshark file
     return tab
 
 
 def sendFrame(tab):
+    # Write trame into a Wireshark file
     wrpcap("trameFrag.pcapng", tab)
     # Passing arguments
     parser = argparse.ArgumentParser(prog="Send trame",
@@ -68,7 +66,7 @@ def sendFrame(tab):
 
 def main():
     tab = createFrame()
-    sendFrame(tab)
-
+    wrpcap("trameFrag.pcapng", tab)
+    #sendFrame(tab)
 
 main()
