@@ -73,6 +73,16 @@ Dans cette partie, vous allez enrichir votre script développé dans la partie p
 - Pour un test encore plus intéressant (optionnel), vous pouvez utiliser un AP (disponible sur demande) et envoyer vos fragments. Pour que l’AP accepte vous données injectées, il faudra faire une « fake authentication » que vous pouvez faire avec `aireplay-ng`
 - Si l’AP accepte vos fragments, il les recomposera et les retransmettra en une seule trame non-fragmentée !
 
+### Resultat
+
+Nous avons créer le script nommé [fragmentation.py](files/fragmentation.py) .
+
+La trame sauvée en format wireshark se situe ici :  [trameFrag.pcapng](files/trameFrag.pcapng) 
+
+Enfin voici la capture d'écran montrant les 4 trames que nous avons générées. On peut voir que Wireshark a pu détecter qu'il s'agissait de trames fragmentée et qu'il a pu les réassembler dans la dernière trame.
+
+![fragment](assets/fragment.PNG)
+
 ## Livrables
 
 Un fork du repo original . Puis, un Pull Request contenant :
@@ -82,7 +92,7 @@ Un fork du repo original . Puis, un Pull Request contenant :
   - Capture d’écran de votre trame importée et déchiffré par Wireshark
 -	Script de fragmentation **abondamment commenté/documenté**
   - Fichier pcap généré par votre script contenant les fragments
-  - Capture d’écran de vos trames importées et déchiffrés par Wireshark 
+  - Capture d’écran de vos trames importées, déchiffrés et réassemblées par Wireshark 
 
 -	Envoyer le hash du commit et votre username GitHub par email au professeur et à l'assistant
 
