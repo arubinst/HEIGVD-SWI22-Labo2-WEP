@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 """ Manually decrypt a wep message given the WEP key"""
@@ -13,11 +13,24 @@ __status__ 		= "Prototype"
 from scapy.all import *
 import binascii
 from rc4 import RC4
+import argparse
 #Cle wep AA:AA:AA:AA:AA
 key= b'\xaa\xaa\xaa\xaa\xaa'
 
+
+# just parsing arguments
+parser = argparse.ArgumentParser(
+    description="Manually encrypt WEP data",
+    epilog="This script was developped as an exercise for the SWI course at HEIG-VD")
+        
+parser.add_argument("cap", help="CAP file with encrypted WEP data")
+
+args = parser.parse_args()
+
+
 #lecture de message chiffré - rdpcap retourne toujours un array, même si la capture contient un seul paquet
-arp = rdpcap('arp.cap')[0]  
+#arp = rdpcap('arp_reencrypted.cap')[0]  
+arp = rdpcap(args.cap)[0]  
 
 # rc4 seed est composé de IV+clé
 seed = arp.iv+key
