@@ -64,7 +64,7 @@ if __name__ == "__main__":
         description="Manually encrypt WEP data",
         epilog="This script was developped as an exercise for the SWI course at HEIG-VD")
         
-    parser.add_argument("--data", type=lambda x: x if len(x) < 27 else False, help="Data to encrypt. If not defined, use decrypted data from arp.cap")
+    parser.add_argument("--data", help="Data to encrypt. If not defined, use decrypted data from arp.cap")
 
     args = parser.parse_args()
 

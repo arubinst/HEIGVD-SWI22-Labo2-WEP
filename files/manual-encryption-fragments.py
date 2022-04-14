@@ -62,19 +62,18 @@ def encrypt_fragments(msg, ref_pkt, key):
     step = len(msg) //3
     #msgs = [msg[i:i*step] for i in range(0, len(msg) - step, step)]
     msgs = [msg[:step], msg[step:step*2],msg[step*2:]]
-    print(msgs)
+    print("Fragmented data: ",msgs)
     pkts = []
 
     for i in range(len(msgs)):
         pkt = ref_pkt.copy()
-        pkt.SC += i+1 # starts with 1
+        pkt.SC += i # starts with 1
 
         m = msgs[i]
-        pkt.iv = randbytes(4)
+        pkt.iv = randbytes(3)
+        pkt.FCfield.MF = (i != len(msgs) - 1)
 
         encrypted = encrypt(m, pkt, key)
-
-        pkt.FCfield.MF = (i != len(msgs) - 1)
         
         pkts.append(pkt)
 
@@ -92,7 +91,6 @@ if __name__ == "__main__":
     parser.add_argument("--data", help="Data to encrypt. At least 9 bytes. If not defined, use decrypted data from arp.cap")
     args = parser.parse_args()
 
-
     #Cle wep AA:AA:AA:AA:AA'\x00\x00\x00'
     key= b'\xaa\xaa\xaa\xaa\xaa'
     arp = rdpcap("arp.cap")[0]
@@ -104,7 +102,6 @@ if __name__ == "__main__":
         msg = decrypt(arp, key)
     
     #lecture de message clair
-    
     packets = encrypt_fragments(msg, arp, key)
 
     # export
