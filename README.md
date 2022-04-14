@@ -44,6 +44,10 @@ Dans cette partie, vous allez récupérer le script Python [manual-decryption.py
 
 ![arp-decrypt](./assets/arp-decrypt.PNG)
 
+
+
+
+
 ### 2. Chiffrement manuel de WEP
 
 Utilisant le script [manual-decryption.py](files/manual-decryption.py) comme guide, créer un nouveau script `manual-encryption.py` capable de chiffrer un message, l’enregistrer dans un fichier pcap et l’envoyer.
@@ -70,7 +74,13 @@ Le fichier Wireshark correspondant est situé ici : [encryptedFrame.pcapng](file
 
 ![trame-decrypt](./assets/trame-decrypt.PNG)
 
+- Envoie de la trame sur le réseau
 
+![paquet](./assets/wlan0mon/paquet.png)
+
+Et le résultat déchiffré avec la clé dans wireshark
+
+![frame](./assets/wlan0mon/frame.png)
 
 ### 3. Fragmentation
 
