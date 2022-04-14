@@ -105,7 +105,7 @@ if __name__ == "__main__":
     packets = encrypt_fragments(msg, arp, key)
 
     # export
-    wrpcap("arp_reencrypted.cap", packets)
+    wrpcap("encrypted_and_fragmented.cap", packets)
     
 
     print("Exported cap file")

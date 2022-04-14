@@ -83,7 +83,7 @@ if __name__ == "__main__":
     arp = encrypt(msg, arp, key)
 
     # export
-    wrpcap("arp_reencrypted.cap", arp)
+    wrpcap("encrypted.cap", arp)
     
     arp.show2()
     print("Exported cap file")
