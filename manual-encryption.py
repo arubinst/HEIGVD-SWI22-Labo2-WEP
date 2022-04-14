@@ -40,7 +40,7 @@ seed = iv + key
 icv= binascii.crc32(data)
 
 
-# Chiffrement de la seed = keystream
+# Chiffrement avec RC4
 cipher = RC4(seed, streaming=False)
 encrypted_frame= cipher.crypt(data + icv.to_bytes(4, byteorder='little'))
 
