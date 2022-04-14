@@ -101,6 +101,16 @@ Dans cette partie, vous allez enrichir votre script développé dans la partie p
 - Pour un test encore plus intéressant (optionnel), vous pouvez utiliser un AP (disponible sur demande) et envoyer vos fragments. Pour que l’AP accepte vous données injectées, il faudra faire une « fake authentication » que vous pouvez faire avec `aireplay-ng`
 - Si l’AP accepte vos fragments, il les recomposera et les retransmettra en une seule trame non-fragmentée !
 
+#### Résultat
+
+Sur la capture suivante, on peut voir que notre première trame est bel et bien un fragment (A), qu'il est le premier (B), que d'autres fragments vont suivre (C) et que ce dernier était bien chiffré avec WEP (D). On remarque notamment que l'on peut retrouver le paquet reconstitué au dernier fragment (E).
+
+![](images/3_0.png)
+
+Sur la capture suivante, on peut voir que notre dernière trame est bel et bien la recomposition de tous les fragments (A), que c'est le troisième fragment (B), qu'il n'y a plus de fragments après celui-ci (C) et que ce dernier était bien chiffré avec WEP (D). On remarque également le texte maintenant déchiffré et en clair (E)
+
+![](images/3_1.png)
+
 ## Livrables
 
 Un fork du repo original . Puis, un Pull Request contenant :
