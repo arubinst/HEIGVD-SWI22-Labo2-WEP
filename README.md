@@ -71,7 +71,7 @@ Un fork du repo original . Puis, un Pull Request contenant :
 
 -	Script de chiffrement WEP **abondamment commenté/documenté**
   
-  > manual-encryption.py
+  > ​	manual-encryption.py
   
   - Fichier pcap généré par votre script contenant la trame chiffrée
   
@@ -79,11 +79,11 @@ Un fork du repo original . Puis, un Pull Request contenant :
   
   - Capture d’écran de votre trame importée et déchiffré par Wireshark
   
-    ![Encryption](C:\Users\Nicolas\OneDrive\Ecole\SWI\Laboratoires\HEIGVD-SWI22-Labo2-WEP\files\figures\1.png)
+    ![Encryption](./files/figures/1.png)
   
 -	Script de fragmentation **abondamment commenté/documenté**
   
-  > fragmentation.py
+  > ​	fragmentation.py
 
   - Fichier pcap généré par votre script contenant les fragments
   
@@ -91,7 +91,7 @@ Un fork du repo original . Puis, un Pull Request contenant :
   
   - Capture d’écran de vos trames importées et déchiffrés par Wireshark 
   
-  > ![Fragmentation](C:\Users\Nicolas\OneDrive\Ecole\SWI\Laboratoires\HEIGVD-SWI22-Labo2-WEP\files\figures\2.png)
+  > ![Fragmentation](./files/figures/2.png)
   
 -	Envoyer le hash du commit et votre username GitHub par email au professeur et à l'assistant
 
