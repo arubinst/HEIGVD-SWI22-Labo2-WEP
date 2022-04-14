@@ -51,7 +51,7 @@ def encrypt(msg, pkt, key):
     # affect ciphertext as new payload
     pkt.wepdata = ciphertext[:-4]
     encrypted_icv = ciphertext[-4:]
-    pkt.icv = struct.unpack('!L', ciphertext[-4:])[0] #int.from_bytes(encrypted_icv, byteorder='big')
+    pkt.icv = int.from_bytes(encrypted_icv, byteorder='big')
 
     #pkt.iv = b'\x00\x00\x00'
     pkt['RadioTap'].len = None # force Scapy to recalculate it
