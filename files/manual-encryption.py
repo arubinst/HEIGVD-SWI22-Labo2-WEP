@@ -65,10 +65,12 @@ if __name__ == "__main__":
         epilog="This script was developped as an exercise for the SWI course at HEIG-VD")
         
     parser.add_argument("--data", help="Data to encrypt. If not defined, use decrypted data from arp.cap")
-
     args = parser.parse_args()
 
-    #Cle wep AA:AA:AA:AA:AA'\x00\x00\x00'
+    if len(args.data) <= 8:
+        print("Data should be greater than 8 bytes.")
+        exit()
+
     key= b'\xaa\xaa\xaa\xaa\xaa'
     arp = rdpcap("arp.cap")[0]
 
@@ -80,10 +82,10 @@ if __name__ == "__main__":
     
     #lecture de message clair
 
-    arp = encrypt(msg, arp, key)
+    pkt = encrypt(msg, arp, key)
 
     # export
-    wrpcap("encrypted.cap", arp)
+    wrpcap("encrypted.cap", pkt)
     
     arp.show2()
     print("Exported cap file")
