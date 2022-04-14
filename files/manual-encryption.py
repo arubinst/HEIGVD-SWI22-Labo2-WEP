@@ -35,24 +35,26 @@ def decrypt(pkt, key):
 
 def encrypt(msg, pkt, key):
 
-    # ICV = CRC32(payload)
-    icv = binascii.crc32(msg)
+    icv = binascii.crc32(msg).to_bytes(4, "little")
+
     ## data_to_encrypt = payload + ICV
-    data_to_encrypt = msg
+    data_to_encrypt = msg + icv
 
     # rc4 seed est composé de IV+clé
-    seed = pkt.iv+key
+    seed = pkt.iv + key
+    #seed = b'\x00\x00\x00'+ key
 
-    print("ICV:", icv.to_bytes(4, "little"))
     # chiffrement rc4
     cipher = RC4(seed, streaming=False)
-    ciphertext=cipher.crypt(data_to_encrypt + icv.to_bytes(4, "little"))
+    ciphertext=cipher.crypt(data_to_encrypt)
 
     # affect ciphertext as new payload
     pkt.wepdata = ciphertext[:-4]
-    pkt.icv = int.from_bytes(ciphertext[-4:], byteorder='big')
+    encrypted_icv = ciphertext[-4:]
+    pkt.icv = struct.unpack('!L', ciphertext[-4:])[0] #int.from_bytes(encrypted_icv, byteorder='big')
 
-    pkt.len = None # force Scapy to recalculate it (thx Leonard who found this trick)
+    #pkt.iv = b'\x00\x00\x00'
+    pkt['RadioTap'].len = None # force Scapy to recalculate it
 
     return pkt
 
@@ -64,14 +66,14 @@ if __name__ == "__main__":
         description="Manually encrypt WEP data",
         epilog="This script was developped as an exercise for the SWI course at HEIG-VD")
         
-    parser.add_argument("reference_cap", help="Already encrypted CAP file to use for encrypting data over it")
-    parser.add_argument("--data", help="Data to encrypt. If not defined, use decrypted data from reference_cap")
+    parser.add_argument("--data", help="Data to encrypt. If not defined, use decrypted data from arp.cap")
 
     args = parser.parse_args()
 
+
     #Cle wep AA:AA:AA:AA:AA
     key= b'\xaa\xaa\xaa\xaa\xaa'
-    arp = rdpcap(args.reference_cap)[0]
+    arp = rdpcap("arp.cap")[0]
 
     if args.data:
         msg = bytes(args.data, "utf-8")
