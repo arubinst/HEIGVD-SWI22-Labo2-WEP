@@ -75,7 +75,7 @@ Un fork du repo original . Puis, un Pull Request contenant :
   
   - Fichier pcap généré par votre script contenant la trame chiffrée
   
-    > arp-encryption.pcap
+    > arp-encryption.cap
   
   - Capture d’écran de votre trame importée et déchiffré par Wireshark
   
