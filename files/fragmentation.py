@@ -19,7 +19,7 @@ textToSend = "testTestTest".encode()
 
 def createFrame():
     tab = []
-    LEN = 4
+    LEN = 3
     for i in range(0, LEN):
         # Get the trame
         trame = rdpcap('arp.cap')[0]
@@ -27,12 +27,13 @@ def createFrame():
         # rc4 seed is composded of IV + Key
         seed = trame.iv + key
 
-        #Fragment number
+        # Fragment number
         trame.SC = i
 
+        # Ask scapy to compute the data length
         trame[RadioTap].len = None
 
-        #Compute ICV
+        # Compute ICV
         icvClear = binascii.crc32(textToSend).to_bytes(4, byteorder='little')
 
         # Encrypt with rc4
@@ -42,6 +43,8 @@ def createFrame():
 
         # message without ICV
         trame.wepdata = cipherText[:-4]
+
+        # Bit more fragment
         if i == (LEN - 1):
             trame.FCfield = trame.FCfield & 0xFB
         else:
@@ -51,8 +54,6 @@ def createFrame():
 
 
 def sendFrame(tab):
-    # Write trame into a Wireshark file
-    wrpcap("trameFrag.pcapng", tab)
     # Passing arguments
     parser = argparse.ArgumentParser(prog="Send trame",
                                      usage="%(prog)s -i wlan0mon",
@@ -62,12 +63,18 @@ def sendFrame(tab):
                         help="The interface that you want to send packets out of")
     args = parser.parse_args()
 
+    # Send paquet to interface
     sendp(tab, iface=args.Interface)
 
 
 def main():
+    # Creat frame tab
     tab = createFrame()
+
+    # Write trame into a Wireshark file
     wrpcap("trameFrag.pcapng", tab)
-    #sendFrame(tab)
+
+    sendFrame(tab)
+
 
 main()
