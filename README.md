@@ -27,14 +27,24 @@ Vous allez devoir faire des recherches sur internet pour apprendre à utiliser S
 Dans cette partie, vous allez récupérer le script Python [manual-decryption.py](files/manual-decryption.py). Il vous faudra également le fichier de capture [arp.cap](files/arp.cap) contenant un message arp chiffré avec WEP et la librairie [rc4.py](files/rc4.py) pour générer les keystreams indispensables pour chiffrer/déchiffrer WEP. Tous les fichiers doivent être copiés dans le même répertoire local sur vos machines.
 
 - Ouvrir le fichier de capture [arp.cap](files/arp.cap) avec Wireshark
-   
 - Utiliser Wireshark pour déchiffrer la capture. Pour cela, il faut configurer dans Wireshark la clé de chiffrement/déchiffrement WEP (Dans Wireshark : Preferences&rarr;Protocols&rarr;IEEE 802.11&rarr;Decryption Keys). Il faut également activer le déchiffrement dans la fenêtre IEEE 802.11 (« Enable decryption »). Vous trouverez la clé dans le script Python [manual-decryption.py](files/manual-decryption.py).
-   
 - Exécuter le script avec `python manual-decryption.py`
-   
 - Comparer la sortie du script avec la capture text déchiffrée par Wireshark
-   
 - Analyser le fonctionnement du script
+
+### Résultat
+
+- trame chiffrée
+
+![arp-crypt](./assets/arp-crypt.PNG)
+
+
+
+- Trame déchiffrée
+
+![arp-decrypt](./assets/arp-decrypt.PNG)
+
+
 
 ### 2. Chiffrement manuel de WEP
 
@@ -50,6 +60,40 @@ Vous devrez donc créer votre message, calculer le contrôle d’intégrité (IC
 - Vous pouvez vous guider à partir du script fourni pour les différentes conversions de formats qui pourraient être nécessaires.
 - Vous pouvez exporter votre nouvelle trame en format pcap utilisant Scapy et ensuite, l’importer dans Wireshark. Si Wireshark est capable de déchiffrer votre trame forgée, elle est correcte !
 
+### Résultat
+
+Nous avons créé le script nommé [manual-encryption.py](files\manual-encryption.py) pour faire cela.
+
+- Lancement
+
+```bash
+python3 manual-encryption.py -i wlan0mon
+```
+
+Le fichier Wireshark correspondant est situé ici : [encryptedFrame.pcapng](files/encryptedFrame.pcapng) 
+
+- Trame chiffrée
+
+![trame-encrypt](./assets/trame-encrypt.PNG)
+
+
+
+- Trame déchiffrée
+
+![trame-decrypt](./assets/trame-decrypt.PNG)
+
+
+
+- Envoi de la trame sur le réseau
+
+![paquet](./assets/wlan0mon/paquet.png)
+
+
+
+- Et le résultat déchiffré avec la clé dans wireshark
+
+
+![frame](./assets/wlan0mon/frame.png)
 
 ### 3. Fragmentation
 
@@ -65,6 +109,30 @@ Dans cette partie, vous allez enrichir votre script développé dans la partie p
 - Pour un test encore plus intéressant (optionnel), vous pouvez utiliser un AP (disponible sur demande) et envoyer vos fragments. Pour que l’AP accepte vous données injectées, il faudra faire une « fake authentication » que vous pouvez faire avec `aireplay-ng`
 - Si l’AP accepte vos fragments, il les recomposera et les retransmettra en une seule trame non-fragmentée !
 
+### Résultat
+
+Nous avons créé le script nommé [fragmentation.py](files/fragmentation.py) .
+
+- Lancement
+
+```bash
+python3 fragmentation.py -i wlan0mon
+```
+
+
+
+La trame sauvée en format wireshark se situe ici :  [trameFrag.pcapng](files/trameFrag.pcapng)
+
+Enfin voici la capture d'écran montrant les 4 trames que nous avons générées. On peut voir que Wireshark a pu détecter qu'il s'agissait de trames fragmentée et qu'il a pu les réassembler dans la dernière trame.
+
+Remarques : dans le script on avait configuré l'envoi de 4 fragments pour effectuer des tests, d'où les 4 fragments présent dans la capture. On a ensuite mis en conformité le code par rapport à la consigne. Le fichier actuel est celui avec 4 fragments.
+
+![fragment](./assets/fragment.PNG)
+
+- Envoi sur le réseau
+
+![wlan0mon](./assets/wlan0mon/wlan0mon.png)
+
 ## Livrables
 
 Un fork du repo original . Puis, un Pull Request contenant :
@@ -74,7 +142,7 @@ Un fork du repo original . Puis, un Pull Request contenant :
   - Capture d’écran de votre trame importée et déchiffré par Wireshark
 -	Script de fragmentation **abondamment commenté/documenté**
   - Fichier pcap généré par votre script contenant les fragments
-  - Capture d’écran de vos trames importées et déchiffrés par Wireshark 
+  - Capture d’écran de vos trames importées, déchiffrés et réassemblées par Wireshark
 
 -	Envoyer le hash du commit et votre username GitHub par email au professeur et à l'assistant
 
