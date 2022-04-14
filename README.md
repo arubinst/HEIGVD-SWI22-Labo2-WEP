@@ -64,6 +64,8 @@ Vous devrez donc créer votre message, calculer le contrôle d’intégrité (IC
 
 ### Résultat
 
+Nous avons créé le script nommé [manual-encryption.py](files\manual-encryption.py) pour faire cela.
+
 Le fichier Wireshark correspondant est situé ici : [encryptedFrame.pcapng](files/encryptedFrame.pcapng) 
 
 - Trame chiffrée
@@ -98,7 +100,7 @@ Dans cette partie, vous allez enrichir votre script développé dans la partie p
 
 ### Resultat
 
-Nous avons créer le script nommé [fragmentation.py](files/fragmentation.py) .
+Nous avons créé le script nommé [fragmentation.py](files/fragmentation.py) .
 
 La trame sauvée en format wireshark se situe ici :  [trameFrag.pcapng](files/trameFrag.pcapng)
 
