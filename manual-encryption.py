@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" Manually encrypt a wep message given the WEP key"""
+""" 2. Chiffrement manuel de WEP : chiffrement d'un message avec WEP"""
 
 __author__      = "Wonjamouna Rosy-Laure, Tevaearai RÃ©becca"
 __copyright__   = "Copyright 2017, HEIG-VD"
@@ -13,6 +13,8 @@ from os import urandom
 from scapy.all import *
 import binascii
 from rc4 import RC4
+from Crypto import Random
+
 
 # writing 
 def write(pkt, filename) :
@@ -24,7 +26,7 @@ arp = rdpcap("arp.cap")[0]
 key= b'\xaa\xaa\xaa\xaa\xaa'
 
 # random iv
-iv = b'\x08\x87\xc5'
+iv = Random.get_random_bytes(3)
 
 # Données à chiffrer
 data = b'1234567890145'

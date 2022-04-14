@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" Manually encrypt a wep message given the WEP key"""
+""" 3. Fragmentation : chiffrement de 3 fragments avec WEP"""
 
 __author__      = "Wonjamouna Rosy-Laure, Tevaearai RÃ©becca"
 __copyright__   = "Copyright 2017, HEIG-VD"
@@ -13,6 +13,7 @@ from os import urandom
 from scapy.all import *
 import binascii
 from rc4 import RC4
+from Crypto import Random
 
 # writing 
 def write(pkt, filename) :
@@ -23,18 +24,8 @@ arp = rdpcap("arp.cap")[0]
 #Cle wep AA:AA:AA:AA:AA
 key= b'\xaa\xaa\xaa\xaa\xaa'
 
-# random iv
-iv = b'\x08\x87\xc5'
-
-# Données à chiffrer
-#data = b'123456789'
-
 # Lecture du message déchiffré
 arp = rdpcap('arp.cap')[0]
-
-
-# rc4 seed est composé de IV+clé
-seed = iv + key
 
 arp.SC = -1 # On veut que le numéro du 1e fragment soit égal à 0
 
@@ -46,6 +37,13 @@ for x in range(0, 3):
         data = b'abcdefghi'
     if x == 2 :
         data = b'ABCDEFGHI'
+
+    # random iv
+    iv = Random.get_random_bytes(3)
+
+    # rc4 seed est composé de IV+clé
+    seed = iv + key
+
     # Calcul du CRC sur les données
     icv= binascii.crc32(data)
 
@@ -59,8 +57,8 @@ for x in range(0, 3):
     arp["RadioTap"].len = None
 
     arp.SC +=1 # On augmente le compteur de fragment
-    arp.FCfield.MF = 1 # Le bit more fragment est à 1
+    arp.FCfield.MF = 1 # Le bit more fragment est à 1 sauf pour le dernier fragment
     if x == 2 :
-        arp.FCfield.MF = 0 # On veut que le dernier fragment est le bit more fragment à 0
+        arp.FCfield.MF = 0 # On veut que le dernier fragment ait le bit more fragment à 0
 
     write(arp, "test2.cap")
